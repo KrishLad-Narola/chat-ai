@@ -8,28 +8,27 @@ import rocket from "./assets/rocket.svg";
 import send from "./assets/send.svg";
 import user_icon from "./assets/user-icon.png";
 import ChatgptLogo from "./assets/chatgptLogo.svg";
+
 import { sendMsgToOpenAI } from "./openai";
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function App() {
-
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
+  const chatRef = useRef(null);
+  
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
     try {
-     
       const userMsg = { text: input, isBot: false };
       setMessages(prev => [...prev, userMsg]);
 
       setInput("");
 
-     
       const res = await sendMsgToOpenAI(input);
 
-     
       const botMsg = { text: res, isBot: true };
       setMessages(prev => [...prev, botMsg]);
 
@@ -38,8 +37,14 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    chatRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
     <div className="App">
+
+      {/* SIDEBAR */}
       <div className='sideBar'>
         <div className='upperSide'>
           <div className='upperSideTop'>
@@ -49,16 +54,16 @@ function App() {
             </div>
 
             <button className='midBtn'>
-              <img src={addButton} alt='' className='addBtn' />
+              <img width={20} src={addButton} alt='' />
               New Chat
             </button>
 
             <div className='upperSideBottom'>
               <button className='query'>
-                <img src={msgIcon} alt='' />What is programming ?
+                <img src={msgIcon} alt='' />What is programming?
               </button>
               <button className='query'>
-                <img src={msgIcon} alt='' />How to use an API ?
+                <img src={msgIcon} alt='' />How to use an API?
               </button>
             </div>
           </div>
@@ -71,7 +76,10 @@ function App() {
         </div>
       </div>
 
+      {/* MAIN */}
       <div className='main'>
+
+        {/* CHAT */}
         <div className='chats'>
           {messages.map((msg, i) => (
             <div key={i} className={`chat ${msg.isBot ? "bot" : ""}`}>
@@ -83,20 +91,26 @@ function App() {
               <p className='txt'>{msg.text}</p>
             </div>
           ))}
+          <div ref={chatRef}></div>
         </div>
 
+      
         <div className='chat-footer'>
-          <input className='inp' type='text' placeholder='Send a message'
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-
-          <button className='send' onClick={handleSend}>
-            <img src={send} alt='send' />
-          </button>
+          <div className='inp'>
+            <input
+              type='text'
+              placeholder='Send a message'
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              // onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            />
+            <button className='send' onClick={handleSend}>
+              <img src={send} alt='send' />
+            </button>
+          </div>
         </div>
 
-        <p>ChatAI may produce incorrect information.</p>
+        <p className="note">ChatAI may produce incorrect information.</p>
       </div>
     </div>
   );

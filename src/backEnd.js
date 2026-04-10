@@ -1,45 +1,41 @@
 import express from "express";
+import fetch from "node-fetch";
 import cors from "cors";
-import OpenAI from "openai";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-// 🔑 Initialize OpenAI
-const client = new OpenAI({
-  apiKey: process.env.REACT_APP_OPENAI_API_KEY,
-});
-
-// 🚀 Single API endpoint
 app.post("/api/chat", async (req, res) => {
+  const { message } = req.body;
+
   try {
-    const { message } = req.body;
-
-    if (!message) {
-      return res.status(400).json({ error: "Message is required" });
-    }
-
-    const response = await client.responses.create({
-      model: "gpt-4.1-mini",
-      input: message,
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: message }],
+      }),
     });
+
+    const data = await response.json();
 
     res.json({
-      text: response.output_text || "No response",
+      text: data.choices[0].message.content,
     });
 
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Something went wrong" });
   }
 });
 
-// 🌐 Start server
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
-});
+app.listen(5000, () => console.log("Server running on port 5000"));
