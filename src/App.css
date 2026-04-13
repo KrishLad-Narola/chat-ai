@@ -389,4 +389,48 @@ body {
   margin: 0 auto; /* Extra insurance for centering */
 }
 
+/* Responsive adjustments */
+.menu-burger {
+    display: none; /* Hidden on desktop */
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: #343541;
+    color: white;
+    border: none;
+    font-size: 24px;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .menu-burger { display: block; }
+
+    .sideBar {
+        position: fixed;
+        left: -100%; /* Hide sidebar */
+        transition: all 0.3s ease;
+        z-index: 999;
+        height: 100vh;
+        width: 260px;
+    }
+
+    .sideBar.active {
+        left: 0;
+    }
+
+    .main {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .inp {
+        width: 90% !important; /* Make input wider on mobile */
+    }
+    
+    .chat {
+        padding: 1.5rem 1rem !important;
+    }
+}
 
