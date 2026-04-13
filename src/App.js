@@ -8,15 +8,17 @@ import rocket from "./assets/rocket.svg";
 import send from "./assets/send.svg";
 import user_icon from "./assets/user-icon.png";
 import ChatgptLogo from "./assets/chatgptLogo.svg";
+import ReactMarkdown from 'react-markdown';
 
-import { sendMsgToOpenAI } from "./openai";
+// import { sendMsgToOpenAI } from "./openai";
 import { useState, useEffect, useRef } from 'react';
+import { getAIResponse } from './API/getAiResponese';
 
 function App() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const chatRef = useRef(null);
-  
+
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -27,7 +29,8 @@ function App() {
 
       setInput("");
 
-      const res = await sendMsgToOpenAI(input);
+      const res = await getAIResponse(input);
+      console.log(res)
 
       const botMsg = { text: res, isBot: true };
       setMessages(prev => [...prev, botMsg]);
@@ -44,7 +47,7 @@ function App() {
   return (
     <div className="App">
 
-      {/* SIDEBAR */}
+
       <div className='sideBar'>
         <div className='upperSide'>
           <div className='upperSideTop'>
@@ -76,25 +79,25 @@ function App() {
         </div>
       </div>
 
-      {/* MAIN */}
+     
       <div className='main'>
 
-        {/* CHAT */}
+        
         <div className='chats'>
           {messages.map((msg, i) => (
             <div key={i} className={`chat ${msg.isBot ? "bot" : ""}`}>
-              <img
-                className='chatimg'
-                src={msg.isBot ? ChatgptLogo : user_icon}
-                alt=''
-              />
-              <p className='txt'>{msg.text}</p>
+              <img className='chatimg' src={msg.isBot ? ChatgptLogo : user_icon} alt='' />
+
+             
+              <div className='txt'>
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
+              </div>
             </div>
           ))}
           <div ref={chatRef}></div>
         </div>
 
-      
+
         <div className='chat-footer'>
           <div className='inp'>
             <input
@@ -102,7 +105,7 @@ function App() {
               placeholder='Send a message'
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              // onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            // onKeyDown={(e) => e.key === "Enter" && handleSend()}
             />
             <button className='send' onClick={handleSend}>
               <img src={send} alt='send' />
