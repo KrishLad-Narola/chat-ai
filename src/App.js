@@ -18,7 +18,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const chatRef = useRef(null);
 
-
+  // ✅ Send Message
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -29,7 +29,6 @@ function App() {
       setInput("");
 
       const res = await getAIResponse(input);
-      console.log(res)
 
       const botMsg = { text: res, isBot: true };
       setMessages(prev => [...prev, botMsg]);
@@ -39,6 +38,28 @@ function App() {
     }
   };
 
+  // ✅ New Chat
+  const handleNewChat = () => {
+    setMessages([]);
+  };
+
+  // ✅ Home
+  const handleHome = () => {
+    setMessages([]);
+    setInput("");
+  };
+
+  // ✅ Saved (demo)
+  const handleSaved = () => {
+    alert("Saved chats feature coming soon!");
+  };
+
+  // ✅ Upgrade (demo)
+  const handleUpgrade = () => {
+    alert("Upgrade feature coming soon!");
+  };
+
+  // ✅ Auto Scroll
   useEffect(() => {
     chatRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -46,16 +67,17 @@ function App() {
   return (
     <div className="App">
 
-
+      {/* Sidebar */}
       <div className='sideBar'>
         <div className='upperSide'>
           <div className='upperSideTop'>
+
             <div className='logo'>
               <img src={GptLogo} alt='logo' />
-              <div className='brand'>ChatAI</div>
+              <span className='brand'>ChatAI</span>
             </div>
 
-            <button className='midBtn'>
+            <button className='midBtn' onClick={handleNewChat}>
               <img width={20} src={addButton} alt='' />
               New Chat
             </button>
@@ -68,26 +90,35 @@ function App() {
                 <img src={msgIcon} alt='' />How to use an API?
               </button>
             </div>
+
           </div>
         </div>
 
         <div className='lowerSide'>
-          <div className='listItems'><img src={Home} alt='' />Home</div>
-          <div className='listItems'><img src={Saved} alt='' />Saved</div>
-          <div className='listItems'><img src={rocket} alt='' />Upgrade</div>
+          <div className='listItems' onClick={handleHome}>
+            <img src={Home} alt='' />Home
+          </div>
+          <div className='listItems' onClick={handleSaved}>
+            <img src={Saved} alt='' />Saved
+          </div>
+          <div className='listItems' onClick={handleUpgrade}>
+            <img src={rocket} alt='' />Upgrade
+          </div>
         </div>
       </div>
 
-     
+      {/* Main Chat */}
       <div className='main'>
 
-        
         <div className='chats'>
           {messages.map((msg, i) => (
             <div key={i} className={`chat ${msg.isBot ? "bot" : ""}`}>
-              <img className='chatimg' src={msg.isBot ? ChatgptLogo : user_icon} alt='' />
+              <img
+                className='chatimg'
+                src={msg.isBot ? ChatgptLogo : user_icon}
+                alt=''
+              />
 
-             
               <div className='txt'>
                 <ReactMarkdown>{msg.text}</ReactMarkdown>
               </div>
@@ -96,7 +127,7 @@ function App() {
           <div ref={chatRef}></div>
         </div>
 
-
+        {/* Input */}
         <div className='chat-footer'>
           <div className='inp'>
             <input
@@ -104,8 +135,9 @@ function App() {
               placeholder='Send a message'
               value={input}
               onChange={(e) => setInput(e.target.value)}
-            // onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
             />
+
             <button className='send' onClick={handleSend}>
               <img src={send} alt='send' />
             </button>
