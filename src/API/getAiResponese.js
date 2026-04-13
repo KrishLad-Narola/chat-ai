@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const getAIResponse = async (userInput) => {
-  const OPENROUTER_API_KEY = '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';
+  const OPENROUTER_API_KEY = process.env.REACT_APP_OPENROUTER_API_KEY;
 
   try {
     const response = await axios.post(

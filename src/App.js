@@ -10,7 +10,6 @@ import user_icon from "./assets/user-icon.png";
 import ChatgptLogo from "./assets/chatgptLogo.svg";
 import ReactMarkdown from 'react-markdown';
 
-// import { sendMsgToOpenAI } from "./openai";
 import { useState, useEffect, useRef } from 'react';
 import { getAIResponse } from './API/getAiResponese';
 
