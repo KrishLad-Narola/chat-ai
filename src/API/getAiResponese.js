@@ -18,11 +18,9 @@ export const getAIResponse = async (userInput) => {
       }
     );
 
-    // Axios stores the JSON body in .data
     return response.data.choices[0].message.content;
 
   } catch (error) {
-    // Axios catches non-2xx status codes automatically
     console.error("API Error:", error.response ? error.response.data : error.message);
     return "Error: Could not get a response.";
   }

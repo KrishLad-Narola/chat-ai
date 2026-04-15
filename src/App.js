@@ -18,7 +18,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const chatRef = useRef(null);
 
-  // ✅ Send Message
+  
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -38,28 +38,26 @@ function App() {
     }
   };
 
-  // ✅ New Chat
+  
   const handleNewChat = () => {
     setMessages([]);
   };
 
-  // ✅ Home
+  
   const handleHome = () => {
     setMessages([]);
     setInput("");
   };
 
-  // ✅ Saved (demo)
+  
   const handleSaved = () => {
     alert("Saved chats feature coming soon!");
   };
 
-  // ✅ Upgrade (demo)
   const handleUpgrade = () => {
     alert("Upgrade feature coming soon!");
   };
 
-  // ✅ Auto Scroll
   useEffect(() => {
     chatRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -67,7 +65,6 @@ function App() {
   return (
     <div className="App">
 
-      {/* Sidebar */}
       <div className='sideBar'>
         <div className='upperSide'>
           <div className='upperSideTop'>
@@ -107,7 +104,6 @@ function App() {
         </div>
       </div>
 
-      {/* Main Chat */}
       <div className='main'>
 
         <div className='chats'>
@@ -127,7 +123,6 @@ function App() {
           <div ref={chatRef}></div>
         </div>
 
-        {/* Input */}
         <div className='chat-footer'>
           <div className='inp'>
             <input
